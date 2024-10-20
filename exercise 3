@@ -1,1 +1,51 @@
+use std::env;
+use std::fs::File;
+use std::io::{self, BufRead, Write};
 
+fn diagonalDifference(arr: &[Vec<i32>]) -> i32 {
+    let n = arr.len();
+    let mut primary_diag_sum = 0;
+    let mut secondary_diag_sum = 0;
+
+    for i in 0..n {
+        primary_diag_sum += arr[i][i];
+        secondary_diag_sum += arr[i][n - 1 - i];
+    }
+
+    (primary_diag_sum - secondary_diag_sum).abs()
+}
+
+fn main() {
+    let stdin = io::stdin();
+    let mut stdin_iterator = stdin.lock().lines();
+
+    let mut fptr = File::create(env::var("OUTPUT_PATH").unwrap()).unwrap();
+
+    let n = stdin_iterator.next().unwrap().unwrap().trim().parse::<usize>().unwrap();
+
+    let mut arr: Vec<Vec<i32>> = Vec::with_capacity(n);
+
+    for _ in 0..n {
+        arr.push(
+            stdin_iterator.next().unwrap().unwrap()
+                .trim_end()
+                .split_whitespace()
+                .map(|s| s.parse::<i32>().unwrap())
+                .collect()
+        );
+    }
+
+    let result = diagonalDifference(&arr);
+
+    writeln!(&mut fptr, "{}", result).ok();
+}
+
+
+
+
+
+Я дописав функцію diagonalDifference, щоб вона обчислювала суми для головної та побічної діагоналей квадратної матриці. Спочатку я створив змінні primary_diag_sum і secondary_diag_sum, щоб зберігати ці суми. 
+
+У циклі по кожному рядку матриці я додавав елементи з головної діагоналі до primary_diag_sum, а елементи з побічної діагоналі до secondary_diag_sum. 
+
+Після циклу я повернув абсолютну різницю між цими двома сумами. Також я додав основну частину коду в main, яка зчитує матрицю зі стандартного вводу, а потім передає її у функцію для обчислення результату
