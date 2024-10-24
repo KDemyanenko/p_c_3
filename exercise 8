@@ -1,1 +1,34 @@
+use std::fs::File;
+use std::io::{self, BufRead, Write};
+use std::env;
 
+fn timeConversion(s: &str) -> String {
+    let am_pm = &s[8..]; 
+    let mut hour = s[..2].parse::<i32>().unwrap(); 
+    let rest_of_time = &s[2..8]; 
+    
+    if am_pm == "PM" && hour != 12 {
+        hour += 12;
+    } else if am_pm == "AM" && hour == 12 {
+        hour = 0;
+    }
+
+    format!("{:02}{}", hour, rest_of_time)
+}
+
+fn main() {
+    let stdin = io::stdin();
+    let mut stdin_iterator = stdin.lock().lines();
+
+    let s = stdin_iterator.next().unwrap().unwrap();
+
+    let result = timeConversion(&s);
+
+    let mut fptr = File::create(env::var("OUTPUT_PATH").unwrap()).unwrap();
+    writeln!(&mut fptr, "{}", result).ok();
+}
+
+
+Я додав три необхідні імпорти, щоб програма працювала. Спочатку я підключив use std::fs::File;, щоб працювати з файлами. Потім додав use std::io::{self, BufRead, Write};, щоб мати доступ до функцій для читання та запису, і також додав use std::env;
+
+щоб працювати зі змінними середовища, зокрема для шляху до файлу виводу. Це все дозволило програмі нормально читати дані та записувати результат у файл.
