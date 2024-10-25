@@ -1,1 +1,45 @@
+fn birthday(s: &[i32], d: i32, m: usize) -> i32 {
+    let mut count = 0;
+    for i in 0..=s.len() - m {
+        if s[i..i + m].iter().sum::<i32>() == d {
+            count += 1;
+        }
+    }
+    count
+}
 
+fn main() {
+    use std::io::{self, BufRead};
+
+    let stdin = io::stdin();
+    let mut lines = stdin.lock().lines();
+
+    let _n = lines.next().unwrap().unwrap().parse::<usize>().unwrap();
+    let s: Vec<i32> = lines
+        .next()
+        .unwrap()
+        .unwrap()
+        .split_whitespace()
+        .map(|x| x.parse::<i32>().unwrap())
+        .collect();
+    
+    let params: Vec<i32> = lines
+        .next()
+        .unwrap()
+        .unwrap()
+        .split_whitespace()
+        .map(|x| x.parse::<i32>().unwrap())
+        .collect();
+    
+    let d = params[0];
+    let m = params[1] as usize;
+
+    let result = birthday(&s, d, m);
+    println!("{}", result);
+}
+
+
+
+Я додав функцію birthday, яка приймає масив шоколадних квадратиків, день і місяць народження Рона. У цій функції я перебираю всі можливі підмасиви довжиною, що дорівнює місяцю, і перевіряю, чи їхня сума дорівнює дню народження. 
+
+Якщо так, то збільшую лічильник. У функції main я зчитую вхідні дані, перетворюю їх у відповідні типи та передаю в birthday, а потім виводжу результат.
