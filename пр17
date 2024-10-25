@@ -1,1 +1,49 @@
+use std::collections::HashMap;
+use std::env;
+use std::fs::File;
+use std::io::{self, BufRead, Write};
 
+fn migratoryBirds(arr: &[i32]) -> i32 {
+    let mut counts = HashMap::new();
+    for &bird in arr {
+        let counter = counts.entry(bird).or_insert(0);
+        *counter += 1;
+    }
+    let mut max_count = 0;
+    let mut min_id = i32::MAX;
+    
+    for (&id, &count) in &counts {
+        if count > max_count || (count == max_count && id < min_id) {
+            max_count = count;
+            min_id = id;
+        }
+    }
+    min_id
+}
+
+fn main() {
+    let stdin = io::stdin();
+    let mut stdin_iterator = stdin.lock().lines();
+
+    let mut fptr = File::create(env::var("OUTPUT_PATH").unwrap()).unwrap();
+
+    let _arr_count = stdin_iterator.next().unwrap().unwrap().trim().parse::<i32>().unwrap();
+
+    let arr: Vec<i32> = stdin_iterator.next().unwrap().unwrap()
+        .trim_end()
+        .split(' ')
+        .map(|s| s.to_string().parse::<i32>().unwrap())
+        .collect();
+
+    let result = migratoryBirds(&arr);
+
+    writeln!(&mut fptr, "{}", result).ok();
+}
+
+
+
+
+
+Я додав імпорт std::collections::HashMap, щоб мати можливість використовувати хеш-картки для підрахунку кількості видів птахів. 
+
+Також включив імпорти std::env та std::fs::File, щоб виправити помилки компіляції, пов'язані зі створенням файлу та доступом до змінних середовища. Завдяки цим змінам код почав компілюватися без помилок і працює, як потрібно.
