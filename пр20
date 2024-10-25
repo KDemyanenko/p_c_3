@@ -1,1 +1,44 @@
+use std::env; 
+use std::fs::File; 
+use std::io::{self, BufRead, Write}; 
+
+fn pageCount(n: i32, p: i32) -> i32 {
+    let from_start = p / 2;
+    let from_end = (n / 2) - (p / 2);
+
+    if from_start < from_end {
+        from_start
+    } else {
+        from_end
+    }
+}
+
+fn main() {
+    let stdin = io::stdin(); 
+    let mut stdin_iterator = stdin.lock().lines(); 
+
+    let mut fptr = File::create(env::var("OUTPUT_PATH").unwrap()).unwrap(); 
+
+    let n = stdin_iterator.next().unwrap().unwrap().trim().parse::<i32>().unwrap(); 
+    let p = stdin_iterator.next().unwrap().unwrap().trim().parse::<i32>().unwrap(); 
+
+    let result = pageCount(n, p); 
+
+    writeln!(&mut fptr, "{}", result).ok(); 
+}
+
+
+
+
+
+Я реалізував функцію pageCount, яка обчислює мінімальну кількість сторінок, які потрібно перегорнути, щоб потрапити на потрібну сторінку. 
+
+Я взяв загальну кількість сторінок n і номер сторінки p, а потім обчислив два значення: кількість перегортань, якщо почати з початку книжки, і кількість перегортань, якщо почати з кінця. 
+
+Для цього я поділив номер сторінки на 2. Нарешті, я повернув менше з обчислених значень. Це дозволило програмі коректно визначати, з якого боку краще почати гортати, щоб зменшити кількість перегортань.
+
+
+
+
+
 
